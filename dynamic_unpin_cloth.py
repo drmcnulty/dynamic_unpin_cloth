@@ -10,18 +10,23 @@ bl_info = {
 
 import bpy
 
-# Split Edges. Requires object to already be selected. Returns object to OBJECT mode
-def split_edges():
+
+# TODO overall: eliminate or isolate context-dependent '.ops' calls
+# TODO: add weld modifier at end of modifier stack? allows smooth shading to work
+
+
+def split_edges_op():
+    """Split Edges. Requires object to already be selected. Returns object to OBJECT mode"""
     try:
         bpy.ops.object.mode_set(mode='EDIT')
         bpy.ops.mesh.select_all(action='SELECT')
         bpy.ops.mesh.edge_split(type='EDGE')
     finally:
         bpy.ops.object.mode_set(mode='OBJECT')
-     
 
-def clothify(obj):
-    # put all vertices in a group (for later cloth pinning)
+
+def configure_vertex_groups(obj):
+    """put all vertices in a pinning group and painting group"""
     v_groups_pin = obj.vertex_groups.get('pin') \
                    or obj.vertex_groups.new(name='pin')
     v_groups_pin.add([vert.index for vert in obj.data.vertices],
@@ -33,21 +38,24 @@ def clothify(obj):
     v_groups_paint.add([vert.index for vert in obj.data.vertices], 0.0, 'REPLACE')
 
 
-    # DYNAMIC PAINT
+def configure_dynamic_paint(obj):
+    """Adds a canvas surface to the object that controls the paint vertex group"""
     if not 'DYNAMIC_PAINT' in [m.type for m in obj.modifiers]:
         obj.modifiers.new('Dynamic Paint', 'DYNAMIC_PAINT')
         #bpy.ops.object.modifier_add(type='DYNAMIC_PAINT')
     obj.modifiers["Dynamic Paint"].ui_type = 'CANVAS'
+    
     canvas_settings = obj.modifiers["Dynamic Paint"].canvas_settings
     if not canvas_settings:
         bpy.ops.dpaint.type_toggle(type='CANVAS')
         canvas_settings = obj.modifiers["Dynamic Paint"].canvas_settings
+        
     surfaces = canvas_settings.canvas_surfaces
     if not surfaces:
         #raise Exception(f'No Dynamic Paint canvas surfaces exist on Object "{obj.name}"')
         bpy.ops.dpaint.surface_slot_add()
 
-    # TODO: get existing "destructo_surface" or create new
+    # TODO: I don't want to overwrite pre-existing surfaces, so get "dynamic_unpin" surface or create new.
     surface = surfaces.get('Surface')
     if not surface:
         surface = bpy.ops.dpaint.surface_slot_add()    
@@ -57,6 +65,7 @@ def clothify(obj):
     surface.output_name_a = "paint"
 
 
+def configure_weight_mix(obj):
     # WEIGHT MIX
     weight_mixer = obj.modifiers.get('Dynamic Cloth Weight Mix') \
                    or obj.modifiers.new('Dynamic Cloth Weight Mix', 'VERTEX_WEIGHT_MIX')
@@ -66,6 +75,7 @@ def clothify(obj):
     weight_mixer.mix_mode = 'SUB'
 
 
+def configure_cloth(obj):
     # CLOTH
     if not 'CLOTH' in [m.type for m in obj.modifiers]:
         bpy.ops.object.modifier_add(type='CLOTH')
@@ -73,6 +83,11 @@ def clothify(obj):
     obj.modifiers["Cloth"].collision_settings.collision_quality = 3
     obj.modifiers["Cloth"].collision_settings.distance_min = 0.002
 
+def clothify(obj):
+    configure_vertex_groups(obj)
+    configure_dynamic_paint(obj)
+    configure_weight_mix(obj)
+    configure_cloth(obj)
 
 
 class DynamicUnpinCloth(bpy.types.Operator):
@@ -95,7 +110,7 @@ class DynamicUnpinCloth(bpy.types.Operator):
             if obj.type == 'MESH':
                 bpy.context.view_layer.objects.active = obj
                 if self.shatter:
-                    split_edges()
+                    split_edges_op()
                 clothify(obj)
         return {'FINISHED'}
 
@@ -120,5 +135,4 @@ if __name__ == "__main__":
 
     # test call
     bpy.ops.object.dynamic_unpin_cloth()
-
 
