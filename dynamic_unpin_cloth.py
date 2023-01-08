@@ -12,7 +12,6 @@ import bpy
 
 
 # TODO overall: eliminate or isolate context-dependent '.ops' calls
-# TODO: add weld modifier at end of modifier stack? allows smooth shading to work
 
 
 def split_edges_op():
@@ -24,16 +23,22 @@ def split_edges_op():
     finally:
         bpy.ops.object.mode_set(mode='OBJECT')
 
+        
+def apply_weld(obj):
+    if not obj.modifiers.get('Weld Split Edges'):
+        obj.modifiers.new('Weld Split Edges', 'WELD')
+
 
 def configure_vertex_groups(obj):
     """put all vertices in a pinning group and painting group"""
+    # put all vertices in a pinning group to control cloth adhesion
     v_groups_pin = obj.vertex_groups.get('pin') \
                    or obj.vertex_groups.new(name='pin')
     v_groups_pin.add([vert.index for vert in obj.data.vertices],
                      1.0,
                      'REPLACE')
 
-    # also put all vertices in a paint group for later dynamic painting
+    # put all vertices in a paint group for later dynamic painting
     v_groups_paint = obj.vertex_groups.get('paint') or obj.vertex_groups.new(name='paint')
     v_groups_paint.add([vert.index for vert in obj.data.vertices], 0.0, 'REPLACE')
 
@@ -42,7 +47,6 @@ def configure_dynamic_paint(obj):
     """Adds a canvas surface to the object that controls the paint vertex group"""
     if not 'DYNAMIC_PAINT' in [m.type for m in obj.modifiers]:
         obj.modifiers.new('Dynamic Paint', 'DYNAMIC_PAINT')
-        #bpy.ops.object.modifier_add(type='DYNAMIC_PAINT')
     obj.modifiers["Dynamic Paint"].ui_type = 'CANVAS'
     
     canvas_settings = obj.modifiers["Dynamic Paint"].canvas_settings
@@ -50,12 +54,13 @@ def configure_dynamic_paint(obj):
         bpy.ops.dpaint.type_toggle(type='CANVAS')
         canvas_settings = obj.modifiers["Dynamic Paint"].canvas_settings
         
+
+    # TODO: I don't want to overwrite pre-existing surfaces, so get "dynamic_unpin" surface or create new.
     surfaces = canvas_settings.canvas_surfaces
     if not surfaces:
         #raise Exception(f'No Dynamic Paint canvas surfaces exist on Object "{obj.name}"')
         bpy.ops.dpaint.surface_slot_add()
-
-    # TODO: I don't want to overwrite pre-existing surfaces, so get "dynamic_unpin" surface or create new.
+        
     surface = surfaces.get('Surface')
     if not surface:
         surface = bpy.ops.dpaint.surface_slot_add()    
@@ -84,6 +89,12 @@ def configure_cloth(obj):
     obj.modifiers["Cloth"].collision_settings.distance_min = 0.002
 
 
+def make_cloth_dynamic(obj):
+    configure_vertex_groups(obj) 
+    configure_dynamic_paint(obj)
+    configure_weight_mix(obj)
+    configure_cloth(obj)
+
 
 class DynamicUnpinCloth(bpy.types.Operator):
     """Turn a Mesh to Pinned Cloth and Allow Dynamic Paint Brushes to unpin it"""
@@ -106,11 +117,11 @@ class DynamicUnpinCloth(bpy.types.Operator):
                 bpy.context.view_layer.objects.active = obj
                 if self.shatter:
                     split_edges_op()
-                    # weld(obj)  # TODO
-                configure_vertex_groups(obj) 
-                configure_dynamic_paint(obj)
-                configure_weight_mix(obj)
-                configure_cloth(obj)
+                    make_cloth_dynamic(obj)
+                    apply_weld(obj)
+                else:
+                    make_cloth_dynamic(obj)
+
         return {'FINISHED'}
 
 
