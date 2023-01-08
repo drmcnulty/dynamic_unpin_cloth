@@ -83,11 +83,6 @@ def configure_cloth(obj):
     obj.modifiers["Cloth"].collision_settings.collision_quality = 3
     obj.modifiers["Cloth"].collision_settings.distance_min = 0.002
 
-def clothify(obj):
-    configure_vertex_groups(obj)
-    configure_dynamic_paint(obj)
-    configure_weight_mix(obj)
-    configure_cloth(obj)
 
 
 class DynamicUnpinCloth(bpy.types.Operator):
@@ -111,7 +106,11 @@ class DynamicUnpinCloth(bpy.types.Operator):
                 bpy.context.view_layer.objects.active = obj
                 if self.shatter:
                     split_edges_op()
-                clothify(obj)
+                    # weld(obj)  # TODO
+                configure_vertex_groups(obj) 
+                configure_dynamic_paint(obj)
+                configure_weight_mix(obj)
+                configure_cloth(obj)
         return {'FINISHED'}
 
 
@@ -135,4 +134,5 @@ if __name__ == "__main__":
 
     # test call
     bpy.ops.object.dynamic_unpin_cloth()
+
 
