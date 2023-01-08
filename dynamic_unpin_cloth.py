@@ -104,7 +104,7 @@ def menu_func(self, context):
     self.layout.operator(DynamicUnpinCloth.bl_idname, text=DynamicUnpinCloth.bl_label)
 
 
-# Register and add to the "object" menu (required to also use F3 search "Simple Object Operator" for quick access).
+# Register and add to the "object" menu (required to also use F3 search "Dynamic Unpin Cloth" for quick access).
 def register():
     bpy.utils.register_class(DynamicUnpinCloth)
     bpy.types.VIEW3D_MT_object.append(menu_func)
@@ -119,6 +119,6 @@ if __name__ == "__main__":
     register()
 
     # test call
-    bpy.ops.object.simple_operator()
+    bpy.ops.object.dynamic_unpin_cloth()
 
 
