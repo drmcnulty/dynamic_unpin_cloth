@@ -20,8 +20,15 @@ https://user-images.githubusercontent.com/33881833/211217315-ffa9cdfb-8a16-4195-
 
 ## Basic Usage:
 ### Apply Dynamic Unpin Cloth to a Mesh Object
+Select the object(s) you want to turn into dynamically unpinnable cloth. In the Object menu, Click "Dynamic Unpin Cloth."
+![image](https://user-images.githubusercontent.com/33881833/211606439-06fc5fcf-e668-4fc1-8a40-17e76275a07a.png)
 ### Create a Dynamic Paint Brush
+Select a different object and add Physics->Dynamic Paint->Brush to it.
+![image](https://user-images.githubusercontent.com/33881833/211607083-37158fcd-880a-4361-b45d-1e85a7568cf5.png)
 ### Animate
+Animate the scene so that the Dynamic Paint Brush makes contact with the DUC object.
+
+![duc_basic_usage](https://user-images.githubusercontent.com/33881833/211629394-9b53ade8-ba60-4145-bb3d-3903d8af95e1.gif)
 
 ## Tutorials:
 ### Particle System
