@@ -30,6 +30,10 @@ Animate the scene so that the Dynamic Paint Brush makes contact with the DUC obj
 
 ![duc_basic_usage](https://user-images.githubusercontent.com/33881833/211629394-9b53ade8-ba60-4145-bb3d-3903d8af95e1.gif)
 
+Want to motivate me to make more code like this?
+
+<a href="https://www.buymeacoffee.com/mcnulty" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
 ## Tutorials:
 ### Particle System
 ### Animated Meshes
