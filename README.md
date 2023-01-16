@@ -44,7 +44,7 @@ Select a different object and add Physics->Dynamic Paint->Brush to it.
 Animate the scene so that the Dynamic Paint Brush makes contact with the DUC object.
 ![duc_basic_usage](https://user-images.githubusercontent.com/33881833/211629394-9b53ade8-ba60-4145-bb3d-3903d8af95e1.gif)
 
-## Tutorials:
+## Tutorials: (Coming Soon!)
 ### Particle System
 ### Animated Meshes
 ### Melting effect
