@@ -10,7 +10,7 @@ Want to motivate me to make more code like this?
 https://user-images.githubusercontent.com/33881833/211217315-ffa9cdfb-8a16-4195-821b-2d3f05363d79.mp4
 
 ## Installation:
-1. Download dynamic_unpin_cloth.py from the latest release : https://github.com/drmcnulty/dynamic_unpin_cloth/releases/download/DUC_1_0_0/dynamic_unpin_cloth.py
+1. Download dynamic_unpin_cloth.py from the latest release : https://github.com/drmcnulty/dynamic_unpin_cloth/releases/latest/download/dynamic_unpin_cloth.py
 1. Open Blender Preferences (Edit > Preferences...) ![image](https://user-images.githubusercontent.com/33881833/211224843-d5b430ea-f382-4925-8bc5-d49a710d9b96.png)
 
 1. Select the "Add-ons" section. ![image](https://user-images.githubusercontent.com/33881833/211224866-f857d650-aada-4269-ad16-b4d4be8448fb.png)
