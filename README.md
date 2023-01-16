@@ -1,6 +1,11 @@
 # Dynamic Unpin Cloth
-Addon for Blender that helps animators create unique effects combining Cloth Physics and Dynamic Paint
+Addon for Blender that helps animators create unique effects combining Cloth Physics and Dynamic Paint.
 
+What started as a tedious and manual physics/modifier stack setup evolved into a reusable addon for Blender-- my first! I wanted a way to destroy meshes without creating a separate set of meshes for the destruction event (e.g. cell fracture + rigid body), and without carefully re-applying Cloth + Vertex Weight Mix modifiers. In the cases of simple, far away, out of focus, or even for close up large-scale cloth destruction, Dynamically painting the destruction onto the object can save you time when exact control of the deformation is unnecessary.
+
+Want to motivate me to make more code like this?
+
+<a href="https://www.buymeacoffee.com/mcnulty" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 https://user-images.githubusercontent.com/33881833/211217315-ffa9cdfb-8a16-4195-821b-2d3f05363d79.mp4
 
@@ -19,20 +24,25 @@ https://user-images.githubusercontent.com/33881833/211217315-ffa9cdfb-8a16-4195-
 ![image](https://user-images.githubusercontent.com/33881833/211224759-dcf3b111-d494-4854-b11e-daa95aa4f342.png)
 
 ## Basic Usage:
+There are 3 steps to adding Dynamic Unpin Cloth behaviour to a scene: 
+1. Apply DUC to the affected object
+1. make a second object into a brush
+1. make the two objects interact.
+
 ### Apply Dynamic Unpin Cloth to a Mesh Object
+
 Select the object(s) you want to turn into dynamically unpinnable cloth. In the Object menu, Click "Dynamic Unpin Cloth."
 ![image](https://user-images.githubusercontent.com/33881833/211606439-06fc5fcf-e668-4fc1-8a40-17e76275a07a.png)
+
 ### Create a Dynamic Paint Brush
+
 Select a different object and add Physics->Dynamic Paint->Brush to it.
 ![image](https://user-images.githubusercontent.com/33881833/211607083-37158fcd-880a-4361-b45d-1e85a7568cf5.png)
+
 ### Animate
+
 Animate the scene so that the Dynamic Paint Brush makes contact with the DUC object.
-
 ![duc_basic_usage](https://user-images.githubusercontent.com/33881833/211629394-9b53ade8-ba60-4145-bb3d-3903d8af95e1.gif)
-
-Want to motivate me to make more code like this?
-
-<a href="https://www.buymeacoffee.com/mcnulty" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 ## Tutorials:
 ### Particle System
